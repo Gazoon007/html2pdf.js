@@ -30,6 +30,7 @@ var orig = {
 
 // Add pagebreak default options to the Worker template.
 Worker.template.opt.pagebreak = {
+  paddingVertical: 0,
   mode: ['css', 'legacy'],
   before: [],
   after: [],
@@ -102,8 +103,8 @@ Worker.prototype.toContainer = function toContainer() {
 
       // Avoid: Check if a break happens mid-element.
       if (rules.avoid && !rules.before) {
-        var startPage = Math.floor(clientRect.top / pxPageHeight);
-        var endPage = Math.floor(clientRect.bottom / pxPageHeight);
+        var startPage = Math.floor((clientRect.top + self.opt.pagebreak.paddingVertical) / pxPageHeight);
+        var endPage = Math.floor((clientRect.bottom + self.opt.pagebreak.paddingVertical) / pxPageHeight);
         var nPages = Math.abs(clientRect.bottom - clientRect.top) / pxPageHeight;
 
         // Turn on rules.before if the el is broken and is at most one page long.
@@ -116,7 +117,7 @@ Worker.prototype.toContainer = function toContainer() {
       if (rules.before) {
         var pad = createElement('div', {style: {
           display: 'block',
-          height: pxPageHeight - (clientRect.top % pxPageHeight) + 'px'
+          height: pxPageHeight - (clientRect.top % pxPageHeight) + self.opt.pagebreak.paddingVertical + 'px'
         }});
         el.parentNode.insertBefore(pad, el);
       }
