@@ -1,6 +1,6 @@
 /*!
- * html2pdf.js v0.10.1
- * Copyright (c) 2021 Erik Koopmans
+ * html2pdf.js v0.10.2
+ * Copyright (c) 2023 Erik Koopmans
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -332,6 +332,7 @@ var orig = {
 }; // Add pagebreak default options to the Worker template.
 
 _worker_js__WEBPACK_IMPORTED_MODULE_5__.default.template.opt.pagebreak = {
+  paddingVertical: 0,
   mode: ['css', 'legacy'],
   before: [],
   after: [],
@@ -397,9 +398,9 @@ _worker_js__WEBPACK_IMPORTED_MODULE_5__.default.prototype.toContainer = function
       var clientRect = el.getBoundingClientRect(); // Avoid: Check if a break happens mid-element.
 
       if (rules.avoid && !rules.before) {
-        var startPage = Math.floor(clientRect.top / pxPageHeight);
-        var endPage = Math.floor(clientRect.bottom / pxPageHeight);
-        var nPages = Math.abs(clientRect.bottom - clientRect.top) / pxPageHeight; // Turn on rules.before if the el is broken and is at most one page long.
+        var startPage = Math.floor(clientRect.top / pxPageHeight) - self.opt.pagebreak.paddingVertical;
+        var endPage = Math.floor(clientRect.bottom + self.opt.pagebreak.paddingVertical / pxPageHeight) - self.opt.pagebreak.paddingVertical;
+        var nPages = Math.abs(clientRect.bottom - clientRect.top) / (pxPageHeight - self.opt.pagebreak.paddingVertical); // Turn on rules.before if the el is broken and is at most one page long.
 
         if (endPage !== startPage && nPages <= 1) {
           rules.before = true;
@@ -411,7 +412,7 @@ _worker_js__WEBPACK_IMPORTED_MODULE_5__.default.prototype.toContainer = function
         var pad = (0,_utils_js__WEBPACK_IMPORTED_MODULE_6__.createElement)('div', {
           style: {
             display: 'block',
-            height: pxPageHeight - clientRect.top % pxPageHeight + 'px'
+            height: pxPageHeight - clientRect.top % pxPageHeight + self.opt.pagebreak.paddingVertical + 'px'
           }
         });
         el.parentNode.insertBefore(pad, el);
