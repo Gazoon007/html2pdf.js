@@ -103,8 +103,9 @@ Worker.prototype.toContainer = function toContainer() {
 
       // Avoid: Check if a break happens mid-element.
       if (rules.avoid && !rules.before) {
-        var startPage = Math.floor(clientRect.top / pxPageHeight) - self.opt.pagebreak.paddingVertical;
-        var endPage = Math.floor(clientRect.bottom + self.opt.pagebreak.paddingVertical / pxPageHeight) - self.opt.pagebreak.paddingVertical;
+        console.log('pb', self.opt.pagebreak.paddingVertical)
+        var startPage = Math.floor(clientRect.top / (pxPageHeight - self.opt.pagebreak.paddingVertical));
+        var endPage = Math.floor(clientRect.bottom / (pxPageHeight - self.opt.pagebreak.paddingVertical));
         var nPages = Math.abs(clientRect.bottom - clientRect.top) / (pxPageHeight - self.opt.pagebreak.paddingVertical);
 
         // Turn on rules.before if the el is broken and is at most one page long.
@@ -117,7 +118,7 @@ Worker.prototype.toContainer = function toContainer() {
       if (rules.before) {
         var pad = createElement('div', {style: {
           display: 'block',
-          height: pxPageHeight - (clientRect.top % pxPageHeight) + self.opt.pagebreak.paddingVertical + 'px'
+          height: (pxPageHeight - (clientRect.top % pxPageHeight) + self.opt.pagebreak.paddingVertical) + 'px'
         }});
         el.parentNode.insertBefore(pad, el);
       }

@@ -1,5 +1,5 @@
 /*!
- * html2pdf.js v0.10.2
+ * html2pdf.js v0.10.3
  * Copyright (c) 2023 Erik Koopmans
  * Released under the MIT License.
  */
@@ -398,8 +398,9 @@ _worker_js__WEBPACK_IMPORTED_MODULE_5__.default.prototype.toContainer = function
       var clientRect = el.getBoundingClientRect(); // Avoid: Check if a break happens mid-element.
 
       if (rules.avoid && !rules.before) {
-        var startPage = Math.floor(clientRect.top / pxPageHeight) - self.opt.pagebreak.paddingVertical;
-        var endPage = Math.floor(clientRect.bottom + self.opt.pagebreak.paddingVertical / pxPageHeight) - self.opt.pagebreak.paddingVertical;
+        console.log('pb', self.opt.pagebreak.paddingVertical);
+        var startPage = Math.floor(clientRect.top / (pxPageHeight - self.opt.pagebreak.paddingVertical));
+        var endPage = Math.floor(clientRect.bottom / (pxPageHeight - self.opt.pagebreak.paddingVertical));
         var nPages = Math.abs(clientRect.bottom - clientRect.top) / (pxPageHeight - self.opt.pagebreak.paddingVertical); // Turn on rules.before if the el is broken and is at most one page long.
 
         if (endPage !== startPage && nPages <= 1) {
